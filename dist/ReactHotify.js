@@ -635,7 +635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return current[key];
 	    }
 	    return function () {
-	      return current[key].apply(this, arguments);
+	      return typeof current[key] !== 'function' ? current[key].apply(this, arguments) : current[key];
 	    };
 	  }
 
