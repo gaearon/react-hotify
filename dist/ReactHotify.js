@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
+		define(factory);
 	else if(typeof exports === 'object')
-		exports["ReactHotify"] = factory(require("react"));
+		exports["ReactHotify"] = factory();
 	else
-		root["ReactHotify"] = factory(root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_24__) {
+		root["ReactHotify"] = factory();
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -56,11 +56,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
+	exports.__esModule = true;
+
 	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
-	exports.__esModule = true;
 	if (process.env.NODE_ENV !== 'production') {
-	  var _default2 = __webpack_require__(7);
+	  var _default2 = __webpack_require__(8);
 
 	  var _default3 = _interopRequireDefault(_default2);
 
@@ -75,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  })();
 	}
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
 
 /***/ },
 /* 1 */
@@ -99,33 +100,28 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/**
-	 * Used as the [maximum length](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
-	 * of an array-like value.
-	 */
-	var MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
+	var getLength = __webpack_require__(26),
+	    isLength = __webpack_require__(4);
 
 	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength).
+	 * Checks if `value` is array-like.
 	 *
 	 * @private
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
 	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	function isArrayLike(value) {
+	  return value != null && isLength(getLength(value));
 	}
 
-	module.exports = isLength;
+	module.exports = isArrayLike;
 
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var escapeRegExp = __webpack_require__(21),
+	var escapeRegExp = __webpack_require__(30),
 	    isObjectLike = __webpack_require__(1);
 
 	/** `Object#toString` result references. */
@@ -185,93 +181,30 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isLength = __webpack_require__(2),
-	    isObjectLike = __webpack_require__(1);
-
-	/** `Object#toString` result references. */
-	var argsTag = '[object Arguments]';
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
 	/**
-	 * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
-	 * of values.
+	 * Used as the [maximum length](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
+	 * of an array-like value.
 	 */
-	var objToString = objectProto.toString;
+	var MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
 
 	/**
-	 * Checks if `value` is classified as an `arguments` object.
+	 * Checks if `value` is a valid array-like length.
 	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
+	 * **Note:** This function is based on [`ToLength`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength).
+	 *
+	 * @private
 	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isArguments(function() { return arguments; }());
-	 * // => true
-	 *
-	 * _.isArguments([1, 2, 3]);
-	 * // => false
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
 	 */
-	function isArguments(value) {
-	  var length = isObjectLike(value) ? value.length : undefined;
-	  return isLength(length) && objToString.call(value) == argsTag;
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
 	}
 
-	module.exports = isArguments;
+	module.exports = isLength;
 
 
 /***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isLength = __webpack_require__(2),
-	    isNative = __webpack_require__(3),
-	    isObjectLike = __webpack_require__(1);
-
-	/** `Object#toString` result references. */
-	var arrayTag = '[object Array]';
-
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
-
-	/**
-	 * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
-	 * of values.
-	 */
-	var objToString = objectProto.toString;
-
-	/* Native method references for those with the same name as other `lodash` methods. */
-	var nativeIsArray = isNative(nativeIsArray = Array.isArray) && nativeIsArray;
-
-	/**
-	 * Checks if `value` is classified as an `Array` object.
-	 *
-	 * @static
-	 * @memberOf _
-	 * @category Lang
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
-	 * @example
-	 *
-	 * _.isArray([1, 2, 3]);
-	 * // => true
-	 *
-	 * _.isArray(function() { return arguments; }());
-	 * // => false
-	 */
-	var isArray = nativeIsArray || function(value) {
-	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
-	};
-
-	module.exports = isArray;
-
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -305,30 +238,119 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	/**
+	 * Performs auto-binding similar to how React does it.
+	 * Skips already auto-bound methods.
+	 * Based on https://github.com/facebook/react/blob/b264372e2b3ad0b0c0c0cc95a2f383e4a1325c3d/src/classic/class/ReactClass.js#L639-L705
+	 */
+	exports['default'] = bindAutoBindMethods;
+
+	function bindAutoBindMethods(internalInstance) {
+	  var component = typeof internalInstance.getPublicInstance === 'function' ? internalInstance.getPublicInstance() : internalInstance;
+
+	  for (var autoBindKey in component.__reactAutoBindMap) {
+	    if (!component.__reactAutoBindMap.hasOwnProperty(autoBindKey)) {
+	      continue;
+	    }
+
+	    // Skip already bound methods
+	    if (component.hasOwnProperty(autoBindKey) && component[autoBindKey].__reactBoundContext === component) {
+	      continue;
+	    }
+
+	    var method = component.__reactAutoBindMap[autoBindKey];
+	    component[autoBindKey] = bindAutoBindMethod(component, method);
+	  }
+	}
+
+	;
+
+	function bindAutoBindMethod(component, method) {
+	  var boundMethod = method.bind(component);
+
+	  boundMethod.__reactBoundContext = component;
+	  boundMethod.__reactBoundMethod = method;
+	  boundMethod.__reactBoundArguments = null;
+
+	  var componentName = component.constructor.displayName;
+	  var _bind = boundMethod.bind;
+
+	  boundMethod.bind = function (newThis) {
+	    var args = Array.prototype.slice.call(arguments, 1);
+	    if (newThis !== component && newThis !== null) {
+	      console.warn('bind(): React component methods may only be bound to the ' + 'component instance. See ' + componentName);
+	    } else if (!args.length) {
+	      console.warn('bind(): You are binding a component method to the component. ' + 'React does this for you automatically in a high-performance ' + 'way, so you can safely remove this call. See ' + componentName);
+	      return boundMethod;
+	    }
+
+	    var reboundMethod = _bind.apply(boundMethod, arguments);
+	    reboundMethod.__reactBoundContext = component;
+	    reboundMethod.__reactBoundMethod = method;
+	    reboundMethod.__reactBoundArguments = args;
+
+	    return reboundMethod;
+	  };
+
+	  return boundMethod;
+	}
+	module.exports = exports['default'];
+
+/***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
+	exports.__esModule = true;
+
 	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
-	exports.__esModule = true;
-	exports['default'] = getHotify;
+	/**
+	 * Updates a React component recursively, so even if children define funky
+	 * `shouldComponentUpdate`, they are forced to re-render.
+	 * Makes sure that any newly added methods are properly auto-bound.
+	 */
+	exports['default'] = deepForceUpdate;
 
-	var _makeHotify = __webpack_require__(8);
+	var _bindAutoBindMethods = __webpack_require__(6);
 
-	var _makeHotify2 = _interopRequireDefault(_makeHotify);
+	var _bindAutoBindMethods2 = _interopRequireDefault(_bindAutoBindMethods);
 
-	var hotifiers = {};
+	var _traverseRenderedChildren = __webpack_require__(14);
 
-	function getHotify(uniqueClassId) {
-	  if (!hotifiers[uniqueClassId]) {
-	    hotifiers[uniqueClassId] = _makeHotify2['default']();
-	  }
+	var _traverseRenderedChildren2 = _interopRequireDefault(_traverseRenderedChildren);
 
-	  return hotifiers[uniqueClassId];
+	function deepForceUpdate(internalInstance, React) {
+	  _traverseRenderedChildren2['default'](internalInstance, _bindAutoBindMethods2['default']);
+	  _traverseRenderedChildren2['default'](internalInstance, setPendingForceUpdate);
+	  _traverseRenderedChildren2['default'](internalInstance, forceUpdateIfPending, React);
 	}
 
+	function setPendingForceUpdate(internalInstance) {
+	  if (internalInstance._pendingForceUpdate === false) {
+	    internalInstance._pendingForceUpdate = true;
+	  }
+	}
+
+	function forceUpdateIfPending(internalInstance, React) {
+	  if (internalInstance._pendingForceUpdate === true) {
+	    // `|| internalInstance` for React 0.12 and earlier
+	    var instance = internalInstance._instance || internalInstance;
+
+	    if (instance.forceUpdate) {
+	      instance.forceUpdate();
+	    } else if (React && React.Component) {
+	      React.Component.prototype.forceUpdate.call(instance);
+	    }
+	  }
+	}
 	module.exports = exports['default'];
 
 /***/ },
@@ -337,25 +359,159 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	exports.__esModule = true;
+
 	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
+	exports['default'] = getHotify;
+
+	var _makeHotify = __webpack_require__(10);
+
+	var _makeHotify2 = _interopRequireDefault(_makeHotify);
+
+	var hotifiers = {};
+
+	function getHotify(React, uniqueClassId) {
+	  if (!hotifiers[uniqueClassId]) {
+	    hotifiers[uniqueClassId] = _makeHotify2['default'](React);
+	  }
+
+	  return hotifiers[uniqueClassId];
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	exports.__esModule = true;
+	/**
+	 * Returns a function that establishes the first prototype passed to it
+	 * as the "source of truth" and patches its methods on subsequent invocations,
+	 * also patching current and previous prototypes to forward calls to it.
+	 */
+	exports['default'] = makeAssimilatePrototype;
+
+	function makeAssimilatePrototype() {
+	  var storedPrototype = null;
+	  var knownPrototypes = [];
+
+	  function wrapMethod(key) {
+	    return function () {
+	      if (storedPrototype[key]) {
+	        return storedPrototype[key].apply(this, arguments);
+	      }
+	    };
+	  }
+
+	  function patchProperty(proto, key) {
+	    proto[key] = storedPrototype[key];
+
+	    if (typeof proto[key] !== 'function' || key === 'type' || key === 'constructor') {
+	      return;
+	    }
+
+	    proto[key] = wrapMethod(key);
+
+	    if (storedPrototype[key].isReactClassApproved) {
+	      proto[key].isReactClassApproved = storedPrototype[key].isReactClassApproved;
+	    }
+
+	    if (proto.__reactAutoBindMap && proto.__reactAutoBindMap[key]) {
+	      proto.__reactAutoBindMap[key] = proto[key];
+	    }
+	  }
+
+	  function updateStoredPrototype(freshPrototype) {
+	    storedPrototype = {};
+
+	    Object.getOwnPropertyNames(freshPrototype).forEach(function (key) {
+	      storedPrototype[key] = freshPrototype[key];
+	    });
+	  }
+
+	  function reconcileWithStoredPrototypes(freshPrototype) {
+	    knownPrototypes.push(freshPrototype);
+	    knownPrototypes.forEach(function (proto) {
+	      Object.getOwnPropertyNames(storedPrototype).forEach(function (key) {
+	        patchProperty(proto, key);
+	      });
+	    });
+	  }
+
+	  return function assimilatePrototype(freshPrototype) {
+	    if (Object.prototype.hasOwnProperty.call(freshPrototype, '__isAssimilatedByReactHotAPI')) {
+	      return;
+	    }
+
+	    updateStoredPrototype(freshPrototype);
+	    reconcileWithStoredPrototypes(freshPrototype);
+	    freshPrototype.__isAssimilatedByReactHotAPI = true;
+	  };
+	}
+
+	;
+	module.exports = exports['default'];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
 	exports['default'] = makeHotify;
 
-	var _React = __webpack_require__(24);
-
-	var _React2 = _interopRequireDefault(_React);
-
-	var _makeProxy = __webpack_require__(9);
+	var _makeProxy = __webpack_require__(12);
 
 	var _makeProxy2 = _interopRequireDefault(_makeProxy);
 
-	/**
-	 * Force-updates an instance regardless of whether
-	 * it descends from React.Component or not.
-	 */
-	function forceUpdate(instance) {
-	  _React2['default'].Component.prototype.forceUpdate.call(instance);
+	var _makePatchReactClass = __webpack_require__(11);
+
+	var _makePatchReactClass2 = _interopRequireDefault(_makePatchReactClass);
+
+	function makeHotify(React) {
+	  var proxyTo = _makeProxy2['default']({});
+	  var mountedInstances = [];
+	  var CurrentClass = null;
+	  var patcher = null;
+
+	  function HotClass() {
+	    CurrentClass.apply(this, arguments);
+	  }
+
+	  function forceUpdate(instance) {
+	    React.Component.prototype.forceUpdate.call(instance);
+	  }
+
+	  return function hotify(NextClass) {
+	    CurrentClass = NextClass;
+
+	    if (typeof NextClass.prototype.__reactAutoBindMap === 'object') {
+	      // created by `React.createClass` so let's patch it
+	      if (!patcher) {
+	        patcher = _makePatchReactClass2['default'](mountedInstances, React);
+	      }
+
+	      trackMount(NextClass.prototype, mountedInstances);
+	      return patcher(NextClass);
+	    }
+
+	    // ES6 class so let's send the methods through proxy
+	    HotClass.prototype = trackMount(proxyTo(NextClass.prototype), mountedInstances);
+	    HotClass.prototype.__proto__ = NextClass.prototype;
+	    HotClass.prototype.constructor = HotClass;
+	    HotClass.prototype.constructor.__proto__ = NextClass;
+
+	    mountedInstances.forEach(forceUpdate);
+	    return HotClass;
+	  };
 	}
 
 	/**
@@ -387,46 +543,88 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  return prototype;
 	}
-
-	function makeHotify() {
-	  var proxyTo = _makeProxy2['default']({});
-	  var mountedInstances = [];
-	  var CurrentClass = null;
-
-	  function HotClass() {
-	    CurrentClass.apply(this, arguments);
-	  }
-
-	  return function hotify(NextClass) {
-	    CurrentClass = NextClass;
-
-	    // Wow, this is dense!
-	    // I have no idea what's going on here, but it works.
-	    HotClass.prototype = trackMount(proxyTo(NextClass.prototype), mountedInstances);
-	    HotClass.prototype.__proto__ = NextClass.prototype;
-	    HotClass.prototype.constructor = HotClass;
-	    HotClass.prototype.constructor.__proto__ = NextClass;
-
-	    mountedInstances.forEach(forceUpdate);
-
-	    return HotClass;
-	  };
-	}
-
 	module.exports = exports['default'];
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
+	exports.__esModule = true;
+
 	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
 
+	/**
+	 * Returns a function that will patch React class with new versions of itself
+	 * on subsequent invocations. Both legacy and ES6 style classes are supported.
+	 */
+	exports['default'] = makePatchReactClass;
+
+	var _makeAssimilatePrototype = __webpack_require__(9);
+
+	var _makeAssimilatePrototype2 = _interopRequireDefault(_makeAssimilatePrototype);
+
+	var _requestForceUpdateAll = __webpack_require__(13);
+
+	var _requestForceUpdateAll2 = _interopRequireDefault(_requestForceUpdateAll);
+
+	function makePatchReactClass(mountedInstances, React) {
+	  var assimilatePrototype = _makeAssimilatePrototype2['default']();
+	  var FirstClass = null;
+
+	  return function patchReactClass(NextClass) {
+	    var nextPrototype = getPrototype(NextClass);
+	    assimilatePrototype(nextPrototype);
+
+	    if (FirstClass) {
+	      _requestForceUpdateAll2['default'](mountedInstances, React);
+	    }
+
+	    return FirstClass || (FirstClass = NextClass);
+	  };
+	}
+
+	;
+
+	function hasNonStubTypeProperty(ReactClass) {
+	  if (!ReactClass.hasOwnProperty('type')) {
+	    return false;
+	  }
+
+	  var descriptor = Object.getOwnPropertyDescriptor(ReactClass, 'type');
+	  if (typeof descriptor.get === 'function') {
+	    return false;
+	  }
+
+	  return true;
+	}
+
+	function getPrototype(ReactClass) {
+	  var prototype = ReactClass.prototype;
+	  var seemsLegit = prototype && typeof prototype.render === 'function';
+
+	  if (!seemsLegit && hasNonStubTypeProperty(ReactClass)) {
+	    prototype = ReactClass.type.prototype;
+	  }
+
+	  return prototype;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	exports.__esModule = true;
+
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
 	exports['default'] = makeProxy;
 
-	var _difference = __webpack_require__(10);
+	var _difference = __webpack_require__(15);
 
 	var _difference2 = _interopRequireDefault(_difference);
 
@@ -436,10 +634,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var current = null;
 
 	  function createProxyMethod(key) {
+	    if (typeof current[key] !== 'function') {
+	      return current[key];
+	    }
 	    return function () {
-	      if (typeof current[key] === 'function') {
-	        return current[key].apply(this, arguments);
-	      }
+	      return current[key].apply(this, arguments);
 	    };
 	  }
 
@@ -454,10 +653,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // Update proxy method list
 	    addedKeys.forEach(function (key) {
-	      proxy[key] = createProxyMethod(key);
+	      try {
+	        proxy[key] = createProxyMethod(key);
+	      } catch (err) {}
 	    });
 	    removedKeys.forEach(function (key) {
-	      delete proxy[key];
+	      try {
+	        delete proxy[key];
+	      } catch (err) {}
 	    });
 
 	    // The caller will use the proxy from now on
@@ -468,23 +671,91 @@ return /******/ (function(modules) { // webpackBootstrap
 	;
 	module.exports = exports['default'];
 
+	// some methods can't be proxied
+
+	// some methods can't be removed
+
 /***/ },
-/* 10 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseDifference = __webpack_require__(13),
-	    baseFlatten = __webpack_require__(14),
-	    isArguments = __webpack_require__(4),
-	    isArray = __webpack_require__(5),
-	    restParam = __webpack_require__(11);
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+	exports['default'] = requestForceUpdateAll;
+
+	var _deepForceUpdate = __webpack_require__(7);
+
+	var _deepForceUpdate2 = _interopRequireDefault(_deepForceUpdate);
+
+	var isRequestPending = false;
+
+	function requestForceUpdateAll(mountedInstances, React) {
+	  if (isRequestPending) {
+	    return;
+	  }
+
+	  /**
+	   * Forces deep re-render of all mounted React components.
+	   * Hat's off to Omar Skalli (@Chetane) for suggesting this approach:
+	   * https://gist.github.com/Chetane/9a230a9fdcdca21a4e29
+	   */
+	  function forceUpdateAll() {
+	    var instance = null;
+	    isRequestPending = false;
+
+	    mountedInstances.forEach(function (instance) {
+	      // `|| instance` for React 0.12 and earlier
+	      instance = instance._reactInternalInstance || instance;
+	      _deepForceUpdate2['default'](instance, React);
+	    });
+	  }
+
+	  setTimeout(forceUpdateAll);
+	}
+
+	;
+	module.exports = exports['default'];
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	exports.__esModule = true;
+	exports["default"] = traverseRenderedChildren;
+
+	function traverseRenderedChildren(internalInstance, callback, argument) {
+	  callback(internalInstance, argument);
+
+	  if (internalInstance._renderedComponent) {
+	    traverseRenderedChildren(internalInstance._renderedComponent, callback, argument);
+	  } else {
+	    for (var key in internalInstance._renderedChildren) {
+	      traverseRenderedChildren(internalInstance._renderedChildren[key], callback, argument);
+	    }
+	  }
+	}
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseDifference = __webpack_require__(18),
+	    baseFlatten = __webpack_require__(19),
+	    isArrayLike = __webpack_require__(2),
+	    restParam = __webpack_require__(16);
 
 	/**
 	 * Creates an array excluding all values of the provided arrays using
-	 * `SameValueZero` for equality comparisons.
-	 *
-	 * **Note:** [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
-	 * comparisons are like strict equality comparisons, e.g. `===`, except that
-	 * `NaN` matches `NaN`.
+	 * [`SameValueZero`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-samevaluezero)
+	 * for equality comparisons.
 	 *
 	 * @static
 	 * @memberOf _
@@ -498,7 +769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => [1, 3]
 	 */
 	var difference = restParam(function(array, values) {
-	  return (isArray(array) || isArguments(array))
+	  return isArrayLike(array)
 	    ? baseDifference(array, baseFlatten(values, false, true))
 	    : [];
 	});
@@ -507,7 +778,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** Used as the `TypeError` message for "Functions" methods. */
@@ -571,10 +842,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var cachePush = __webpack_require__(18),
+	var cachePush = __webpack_require__(24),
 	    isNative = __webpack_require__(3);
 
 	/** Native method references. */
@@ -606,12 +877,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseIndexOf = __webpack_require__(15),
-	    cacheIndexOf = __webpack_require__(17),
-	    createCache = __webpack_require__(19);
+	var baseIndexOf = __webpack_require__(20),
+	    cacheIndexOf = __webpack_require__(23),
+	    createCache = __webpack_require__(25);
 
 	/**
 	 * The base implementation of `_.difference` which accepts a single array
@@ -664,12 +935,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isArguments = __webpack_require__(4),
-	    isArray = __webpack_require__(5),
-	    isLength = __webpack_require__(2),
+	var isArguments = __webpack_require__(28),
+	    isArray = __webpack_require__(29),
+	    isArrayLike = __webpack_require__(2),
 	    isObjectLike = __webpack_require__(1);
 
 	/**
@@ -678,8 +949,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @private
 	 * @param {Array} array The array to flatten.
-	 * @param {boolean} isDeep Specify a deep flatten.
-	 * @param {boolean} isStrict Restrict flattening to arrays and `arguments` objects.
+	 * @param {boolean} [isDeep] Specify a deep flatten.
+	 * @param {boolean} [isStrict] Restrict flattening to arrays-like objects.
 	 * @returns {Array} Returns the new flattened array.
 	 */
 	function baseFlatten(array, isDeep, isStrict) {
@@ -690,8 +961,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  while (++index < length) {
 	    var value = array[index];
-
-	    if (isObjectLike(value) && isLength(value.length) && (isArray(value) || isArguments(value))) {
+	    if (isObjectLike(value) && isArrayLike(value) &&
+	        (isStrict || isArray(value) || isArguments(value))) {
 	      if (isDeep) {
 	        // Recursively flatten arrays (susceptible to call stack limits).
 	        value = baseFlatten(value, isDeep, isStrict);
@@ -699,7 +970,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var valIndex = -1,
 	          valLength = value.length;
 
-	      result.length += valLength;
 	      while (++valIndex < valLength) {
 	        result[++resIndex] = value[valIndex];
 	      }
@@ -714,10 +984,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var indexOfNaN = __webpack_require__(20);
+	var indexOfNaN = __webpack_require__(27);
 
 	/**
 	 * The base implementation of `_.indexOf` without support for binary searches.
@@ -747,7 +1017,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 16 */
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * The base implementation of `_.property` without support for deep paths.
+	 *
+	 * @private
+	 * @param {string} key The key of the property to get.
+	 * @returns {Function} Returns the new function.
+	 */
+	function baseProperty(key) {
+	  return function(object) {
+	    return object == null ? undefined : object[key];
+	  };
+	}
+
+	module.exports = baseProperty;
+
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -769,10 +1059,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 17 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(6);
+	var isObject = __webpack_require__(5);
 
 	/**
 	 * Checks if `value` is in `cache` mimicking the return signature of
@@ -794,10 +1084,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(6);
+	var isObject = __webpack_require__(5);
 
 	/**
 	 * Adds `value` to the cache.
@@ -820,11 +1110,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SetCache = __webpack_require__(12),
-	    constant = __webpack_require__(22),
+	var SetCache = __webpack_require__(17),
+	    constant = __webpack_require__(31),
 	    isNative = __webpack_require__(3);
 
 	/** Native method references. */
@@ -848,7 +1138,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 20 */
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseProperty = __webpack_require__(21);
+
+	/**
+	 * Gets the "length" property value of `object`.
+	 *
+	 * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
+	 * that affects Safari on at least iOS 8.1-8.3 ARM64.
+	 *
+	 * @private
+	 * @param {Object} object The object to query.
+	 * @returns {*} Returns the "length" value.
+	 */
+	var getLength = baseProperty('length');
+
+	module.exports = getLength;
+
+
+/***/ },
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -877,10 +1188,98 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 21 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseToString = __webpack_require__(16);
+	var isArrayLike = __webpack_require__(2),
+	    isObjectLike = __webpack_require__(1);
+
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]';
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/**
+	 * Checks if `value` is classified as an `arguments` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArguments(function() { return arguments; }());
+	 * // => true
+	 *
+	 * _.isArguments([1, 2, 3]);
+	 * // => false
+	 */
+	function isArguments(value) {
+	  return isObjectLike(value) && isArrayLike(value) && objToString.call(value) == argsTag;
+	}
+
+	module.exports = isArguments;
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isLength = __webpack_require__(4),
+	    isNative = __webpack_require__(3),
+	    isObjectLike = __webpack_require__(1);
+
+	/** `Object#toString` result references. */
+	var arrayTag = '[object Array]';
+
+	/** Used for native method references. */
+	var objectProto = Object.prototype;
+
+	/**
+	 * Used to resolve the [`toStringTag`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-object.prototype.tostring)
+	 * of values.
+	 */
+	var objToString = objectProto.toString;
+
+	/* Native method references for those with the same name as other `lodash` methods. */
+	var nativeIsArray = isNative(nativeIsArray = Array.isArray) && nativeIsArray;
+
+	/**
+	 * Checks if `value` is classified as an `Array` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isArray([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArray(function() { return arguments; }());
+	 * // => false
+	 */
+	var isArray = nativeIsArray || function(value) {
+	  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
+	};
+
+	module.exports = isArray;
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var baseToString = __webpack_require__(22);
 
 	/**
 	 * Used to match `RegExp` [special characters](http://www.regular-expressions.info/characters.html#special).
@@ -915,7 +1314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 22 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -944,75 +1343,46 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 23 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// shim for using process in browser
 
 	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
 
-	process.nextTick = (function () {
-	    var canSetImmediate = typeof window !== 'undefined'
-	    && window.setImmediate;
-	    var canMutationObserver = typeof window !== 'undefined'
-	    && window.MutationObserver;
-	    var canPost = typeof window !== 'undefined'
-	    && window.postMessage && window.addEventListener
-	    ;
-
-	    if (canSetImmediate) {
-	        return function (f) { return window.setImmediate(f) };
+	function drainQueue() {
+	    if (draining) {
+	        return;
 	    }
-
-	    var queue = [];
-
-	    if (canMutationObserver) {
-	        var hiddenDiv = document.createElement("div");
-	        var observer = new MutationObserver(function () {
-	            var queueList = queue.slice();
-	            queue.length = 0;
-	            queueList.forEach(function (fn) {
-	                fn();
-	            });
-	        });
-
-	        observer.observe(hiddenDiv, { attributes: true });
-
-	        return function nextTick(fn) {
-	            if (!queue.length) {
-	                hiddenDiv.setAttribute('yes', 'no');
-	            }
-	            queue.push(fn);
-	        };
+	    draining = true;
+	    var currentQueue;
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        var i = -1;
+	        while (++i < len) {
+	            currentQueue[i]();
+	        }
+	        len = queue.length;
 	    }
-
-	    if (canPost) {
-	        window.addEventListener('message', function (ev) {
-	            var source = ev.source;
-	            if ((source === window || source === null) && ev.data === 'process-tick') {
-	                ev.stopPropagation();
-	                if (queue.length > 0) {
-	                    var fn = queue.shift();
-	                    fn();
-	                }
-	            }
-	        }, true);
-
-	        return function nextTick(fn) {
-	            queue.push(fn);
-	            window.postMessage('process-tick', '*');
-	        };
+	    draining = false;
+	}
+	process.nextTick = function (fun) {
+	    queue.push(fun);
+	    if (!draining) {
+	        setTimeout(drainQueue, 0);
 	    }
-
-	    return function nextTick(fn) {
-	        setTimeout(fn, 0);
-	    };
-	})();
+	};
 
 	process.title = 'browser';
 	process.browser = true;
 	process.env = {};
 	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
 
 	function noop() {}
 
@@ -1033,13 +1403,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.chdir = function (dir) {
 	    throw new Error('process.chdir is not supported');
 	};
+	process.umask = function() { return 0; };
 
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_24__;
 
 /***/ }
 /******/ ])

@@ -2,9 +2,9 @@ import makeHotify from './makeHotify';
 
 const hotifiers = {};
 
-export default function getHotify(uniqueClassId) {
+export default function getHotify(React, uniqueClassId) {
   if (!hotifiers[uniqueClassId]) {
-    hotifiers[uniqueClassId] = makeHotify();
+    hotifiers[uniqueClassId] = makeHotify(React);
   }
 
   return hotifiers[uniqueClassId];
