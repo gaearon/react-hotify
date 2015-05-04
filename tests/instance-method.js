@@ -71,7 +71,7 @@ describe('instance method', () => {
 
   beforeEach(() => {
     renderer = createShallowRenderer();
-    hotify = makeHotify();
+    hotify = makeHotify(React);
   });
 
   it('gets replaced', () => {

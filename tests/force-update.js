@@ -75,7 +75,7 @@ describe('force update', () => {
 
   beforeEach(() => {
     renderer = createShallowRenderer();
-    hotify = makeHotify();
+    hotify = makeHotify(React);
   });
 
   it('gets triggered on a plain class', () => {

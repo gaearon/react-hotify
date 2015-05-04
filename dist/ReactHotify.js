@@ -58,7 +58,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	if (process.env.NODE_ENV !== 'production') {
 	  var _default2 = __webpack_require__(8);
@@ -310,14 +310,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 	/**
 	 * Updates a React component recursively, so even if children define funky
 	 * `shouldComponentUpdate`, they are forced to re-render.
 	 * Makes sure that any newly added methods are properly auto-bound.
 	 */
 	exports['default'] = deepForceUpdate;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _bindAutoBindMethods = __webpack_require__(6);
 
@@ -360,10 +360,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 	exports['default'] = getHotify;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _makeHotify = __webpack_require__(10);
 
@@ -463,10 +462,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 	exports['default'] = makeHotify;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _makeProxy = __webpack_require__(12);
 
@@ -553,13 +551,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.__esModule = true;
 
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 	/**
 	 * Returns a function that will patch React class with new versions of itself
 	 * on subsequent invocations. Both legacy and ES6 style classes are supported.
 	 */
 	exports['default'] = makePatchReactClass;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _makeAssimilatePrototype = __webpack_require__(9);
 
@@ -619,10 +617,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 	exports['default'] = makeProxy;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _difference = __webpack_require__(15);
 
@@ -682,10 +679,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-
-	var _interopRequireDefault = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
 	exports['default'] = requestForceUpdateAll;
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _deepForceUpdate = __webpack_require__(7);
 

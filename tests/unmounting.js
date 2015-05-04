@@ -39,7 +39,7 @@ describe('unmounting', () => {
 
   beforeEach(() => {
     renderer = createShallowRenderer();
-    hotify = makeHotify();
+    hotify = makeHotify(React);
   });
 
   it('happens without hotify', () => {
