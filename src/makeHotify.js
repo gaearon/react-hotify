@@ -58,6 +58,8 @@ export default function makeHotify() {
     HotClass.prototype.constructor = HotClass;
     HotClass.prototype.constructor.__proto__ = NextClass;
 
+    HotClass.displayName = (NextClass.displayName || NextClass.name) + '#hot';
+
     mountedInstances.forEach(forceUpdate);
 
     return HotClass;
