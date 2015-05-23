@@ -1,12 +1,42 @@
-import React from 'react';
 import makeProxy from './makeProxy';
+import makePatchReactClass from './makePatchReactClass';
 
-/**
- * Force-updates an instance regardless of whether
- * it descends from React.Component or not.
- */
-function forceUpdate(instance) {
-  React.Component.prototype.forceUpdate.call(instance);
+export default function makeHotify(React) {
+  const proxyTo = makeProxy({});
+  const mountedInstances = [];
+  let CurrentClass = null;
+  let patcher = null;
+
+  function HotClass () {
+    CurrentClass.apply(this, arguments);
+  }
+
+  function forceUpdate(instance) {
+    React.Component.prototype.forceUpdate.call(instance);
+  }
+
+  return function hotify(NextClass) {
+    CurrentClass = NextClass;
+
+    if (typeof NextClass.prototype.__reactAutoBindMap === 'object') {
+      // created by `React.createClass` so let's patch it
+      if (!patcher) {
+        patcher = makePatchReactClass(mountedInstances, React);
+      }
+
+      trackMount(NextClass.prototype, mountedInstances);
+      return patcher(NextClass);
+    }
+
+    // ES6 class so let's send the methods through proxy
+    HotClass.prototype = trackMount(proxyTo(NextClass.prototype), mountedInstances);
+    HotClass.prototype.__proto__ = NextClass.prototype;
+    HotClass.prototype.constructor = HotClass;
+    HotClass.prototype.constructor.__proto__ = NextClass;
+
+    mountedInstances.forEach(forceUpdate);
+    return HotClass;
+  };
 }
 
 /**
@@ -37,29 +67,4 @@ function trackMount(prototype, mountedInstances) {
   };
 
   return prototype;
-}
-
-export default function makeHotify() {
-  const proxyTo = makeProxy({});
-  const mountedInstances = [];
-  let CurrentClass = null;
-
-  function HotClass() {
-    CurrentClass.apply(this, arguments);
-  }
-
-  return function hotify(NextClass) {
-    CurrentClass = NextClass;
-
-    // Wow, this is dense!
-    // I have no idea what's going on here, but it works.
-    HotClass.prototype = trackMount(proxyTo(NextClass.prototype), mountedInstances);
-    HotClass.prototype.__proto__ = NextClass.prototype;
-    HotClass.prototype.constructor = HotClass;
-    HotClass.prototype.constructor.__proto__ = NextClass;
-
-    mountedInstances.forEach(forceUpdate);
-
-    return HotClass;
-  };
 }

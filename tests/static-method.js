@@ -41,7 +41,7 @@ describe('static method', () => {
 
   beforeEach(() => {
     renderer = createShallowRenderer();
-    hotify = makeHotify();
+    hotify = makeHotify(React);
   });
 
   it('is available on hotified class instance', () => {

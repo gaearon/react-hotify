@@ -39,7 +39,7 @@ describe('consistency', () => {
 
   beforeEach(() => {
     renderer = createShallowRenderer();
-    hotify = makeHotify();
+    hotify = makeHotify(React);
   });
 
   it('does not overwrite the hotified class', () => {

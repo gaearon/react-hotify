@@ -1,8 +1,8 @@
 {
   "name": "react-hotify",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A generic library implementing hot reload for React components without unmounting or losing their state.",
-  "main": "modules/index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "./scripts/build",
     "test": "./scripts/test",
@@ -22,8 +22,8 @@
     "react": ">=0.11.0"
   },
   "devDependencies": {
-    "babel": "^5.1.13",
-    "babel-core": "^5.1.13",
+    "babel": ">=5.2.4",
+    "babel-core": ">=5.2.4",
     "babel-loader": "^5.0.0",
     "expect.js": "^0.3.1",
     "mocha": "^2.2.4",

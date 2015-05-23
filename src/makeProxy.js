@@ -6,11 +6,14 @@ export default function makeProxy(proxy) {
   let current = null;
 
   function createProxyMethod(key) {
+    if (typeof current[key] !== 'function') {
+      return current[key];
+    }
     return function () {
-      if (typeof current[key] === 'function') {
-        return current[key].apply(this, arguments);
-      }
-    };
+      return typeof current[key] === 'function'
+        ? current[key].apply(this, arguments)
+        : current[key];
+    }
   }
 
   return function proxyTo(fresh) {
@@ -24,10 +27,18 @@ export default function makeProxy(proxy) {
 
     // Update proxy method list
     addedKeys.forEach(key => {
-      proxy[key] = createProxyMethod(key);
+      try {
+        proxy[key] = createProxyMethod(key);
+      } catch (err) {
+        // some methods can't be proxied
+      }
     });
     removedKeys.forEach(key => {
-      delete proxy[key];
+      try {
+        delete proxy[key];
+      } catch (err) {
+        // some methods can't be removed
+      }
     })
 
     // The caller will use the proxy from now on
