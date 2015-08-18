@@ -1,3 +1,4 @@
+import assign from 'lodash/object/assign';
 import difference from 'lodash/array/difference';
 
 const SPECIAL_KEYS = ['constructor'];
@@ -24,8 +25,9 @@ export default function createProxy(proxy) {
 
     // Update proxy method list
     addedKeys.forEach(key => {
-      if (typeof proxy[key] === 'function' || typeof fresh[key] === 'function') {
+      if (typeof proxy[key] === 'function' || typeof current[key] === 'function') {
         proxy[key] = createProxyMethod(key);
+        proxy[key].isReactClassApproved = current[key].isReactClassApproved;
       }
     });
     removedKeys.forEach(key => {
