@@ -24,7 +24,9 @@ export default function createProxy(proxy) {
 
     // Update proxy method list
     addedKeys.forEach(key => {
-      proxy[key] = createProxyMethod(key);
+      if (typeof proxy[key] === 'function' || typeof fresh[key] === 'function') {
+        proxy[key] = createProxyMethod(key);
+      }
     });
     removedKeys.forEach(key => {
       delete proxy[key];

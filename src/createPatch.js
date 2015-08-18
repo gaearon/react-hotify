@@ -48,8 +48,9 @@ export default function createPatch() {
     CurrentClass.apply(this, arguments);
   }
 
-  return function hotify(NextClass) {
+  return function patch(NextClass) {
     CurrentClass = NextClass;
+    console.log('updating current with ', NextClass.displayName);
 
     // Wow, this is dense!
     // I have no idea what's going on here, but it works.
