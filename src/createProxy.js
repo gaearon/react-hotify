@@ -7,11 +7,13 @@ export default function createProxy(proxy) {
   let current = null;
 
   function createProxyMethod(key) {
-    return function () {
+    let method = function () {
       if (typeof current[key] === 'function') {
         return current[key].apply(this, arguments);
       }
     };
+    assign(method, current[key]);
+    return method;
   }
 
   return function proxyTo(fresh) {
@@ -27,12 +29,11 @@ export default function createProxy(proxy) {
     addedKeys.forEach(key => {
       if (typeof proxy[key] === 'function' || typeof current[key] === 'function') {
         proxy[key] = createProxyMethod(key);
-        proxy[key].isReactClassApproved = current[key].isReactClassApproved;
       }
     });
     removedKeys.forEach(key => {
       delete proxy[key];
-    })
+    });
 
     // The caller will use the proxy from now on
     return proxy;

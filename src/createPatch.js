@@ -88,7 +88,9 @@ function bindAutoBindMethods(component) {
 }
 
 export default function createPatch() {
-  const proxyTo = createProxy({});
+  const proxyTo = createProxy({
+    __reactAutoBindMap: undefined
+  });
   const mountedInstances = [];
   let CurrentClass = null;
 

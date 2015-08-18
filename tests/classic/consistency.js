@@ -1,38 +1,37 @@
-/*
-import React, { Component } from 'react';
+import React from 'react';
 import createShallowRenderer from '../helpers/createShallowRenderer';
 import expect from 'expect.js';
 import { createPatch } from '../../src';
 
-class Bar {
+const Bar = React.createClass({
   componentWillUnmount() {
     this.didUnmount = true;
-  }
+  },
 
   render() {
     return <div>Bar</div>;
   }
-}
+});
 
-class Baz {
+const Baz = React.createClass({
   componentWillUnmount() {
     this.didUnmount = true;
-  }
+  },
 
   render() {
     return <div>Baz</div>;
   }
-}
+});
 
-class Foo {
+const Foo = React.createClass({
   componentWillUnmount() {
     this.didUnmount = true;
-  }
+  },
 
   render() {
     return <div>Foo</div>;
   }
-}
+});
 
 describe('consistency', () => {
   let renderer;
@@ -67,4 +66,3 @@ describe('consistency', () => {
     expect(barInstance instanceof HotBaz).to.equal(true);
   });
 });
-*/

@@ -113,7 +113,7 @@ describe('classic instance method', () => {
    * It is important to make deleted methods no-ops
    * so they don't crash if setTimeout-d or setInterval-d.
    */
-  it.skip('is detached and acts as a no-op if not reassigned and deleted', () => {
+  it('is detached and acts as a no-op if not reassigned and deleted', () => {
     const HotCounter = patch(Counter1x);
     const instance = renderer.render(<HotCounter />);
     expect(renderer.getRenderOutput().props.children).to.equal(0);
@@ -122,14 +122,13 @@ describe('classic instance method', () => {
     expect(renderer.getRenderOutput().props.children).to.equal(1);
 
     patch(CounterWithoutIncrementMethod);
-    // TODO: uh
-    //expect(instance.increment).to.equal(undefined);
+    expect(instance.increment).to.equal(undefined);
     savedIncrement.call(instance);
     renderer.render(<HotCounter />);
     expect(renderer.getRenderOutput().props.children).to.equal(1);
   });
 
-  it.skip('is attached and acts as a no-op if reassigned and deleted', () => {
+  it('is attached and acts as a no-op if reassigned and deleted', () => {
     const HotCounter = patch(Counter1x);
     const instance = renderer.render(<HotCounter />);
 
