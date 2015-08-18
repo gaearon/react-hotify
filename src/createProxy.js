@@ -1,3 +1,4 @@
+import assign from 'lodash/object/assign';
 import difference from 'lodash/array/difference';
 
 const SPECIAL_KEYS = ['constructor'];
@@ -6,11 +7,13 @@ export default function createProxy(proxy) {
   let current = null;
 
   function createProxyMethod(key) {
-    return function () {
+    let method = function () {
       if (typeof current[key] === 'function') {
         return current[key].apply(this, arguments);
       }
     };
+    assign(method, current[key]);
+    return method;
   }
 
   return function proxyTo(fresh) {
@@ -24,11 +27,13 @@ export default function createProxy(proxy) {
 
     // Update proxy method list
     addedKeys.forEach(key => {
-      proxy[key] = createProxyMethod(key);
+      if (typeof proxy[key] === 'function' || typeof current[key] === 'function') {
+        proxy[key] = createProxyMethod(key);
+      }
     });
     removedKeys.forEach(key => {
       delete proxy[key];
-    })
+    });
 
     // The caller will use the proxy from now on
     return proxy;
