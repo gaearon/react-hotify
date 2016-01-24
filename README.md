@@ -83,6 +83,7 @@ deepForceUpdate(rootInstance);
 * Replaces static getters and setters
 * Replaces unbound static methods
 * Replaces static properties unless they were overwritten by code
+* Merges the initial state of new versions with existing component state
 
 ## Known Limitations
 

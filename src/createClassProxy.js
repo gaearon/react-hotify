@@ -2,6 +2,7 @@ import find from 'lodash/find';
 import createPrototypeProxy from './createPrototypeProxy';
 import bindAutoBindMethods from './bindAutoBindMethods';
 import deleteUnknownAutoBindMethods from './deleteUnknownAutoBindMethods';
+import mergeState from './mergeState';
 import supportsProtoAssignment from './supportsProtoAssignment';
 
 const RESERVED_STATICS = [
@@ -173,6 +174,10 @@ function proxyClass(InitialComponent) {
       // We might have added new methods that need to be auto-bound
       mountedInstances.forEach(bindAutoBindMethods);
       mountedInstances.forEach(deleteUnknownAutoBindMethods);
+
+      // Merge the initial state of the next component with
+      // the initial state of the current component
+      mountedInstances.forEach(instance => mergeState(instance, CurrentComponent));
     }
   };
 
