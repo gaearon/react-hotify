@@ -28,21 +28,29 @@ function isEqualDescriptor(a, b) {
   return true;
 }
 
-// This was originally a WeakMap but we had issues with React Native:
-// https://github.com/gaearon/react-proxy/issues/50#issuecomment-192928066
-let allProxies = [];
-function findProxy(Component) {
-  const pair = find(allProxies, ([key]) => key === Component);
-  return pair ? pair[1] : null;
+if (!global.WeakMap) {
+  global.WeakMap = class WeakMap {
+    constructor() {
+      this.items = [];
+    }
+
+    get(key) {
+      const pair = find(this.items, ([k]) => k === key);
+      return pair ? pair[1] : undefined;
+    }
+
+    set(key, value) {
+      this.items.push([key, value]);
+    }
+  }
 }
-function addProxy(Component, proxy) {
-  allProxies.push([Component, proxy]);
-}
+
+let allProxies = new WeakMap();
 
 export default function proxyClass(InitialComponent) {
   // Prevent double wrapping.
   // Given a proxy class, return the existing proxy managing it.
-  var existingProxy = findProxy(InitialComponent);
+  var existingProxy = allProxies.get(InitialComponent);
   if (existingProxy) {
     return existingProxy;
   }
@@ -104,7 +112,7 @@ export default function proxyClass(InitialComponent) {
     }
 
     // Prevent proxy cycles
-    var existingProxy = findProxy(NextComponent);
+    var existingProxy = allProxies.get(NextComponent);
     if (existingProxy) {
       return update(existingProxy.__getCurrent());
     }
@@ -185,7 +193,7 @@ export default function proxyClass(InitialComponent) {
   update(InitialComponent);
 
   const proxy = { get, update };
-  addProxy(ProxyComponent, proxy);
+  allProxies.set(ProxyComponent, proxy);
 
   Object.defineProperty(proxy, '__getCurrent', {
     configurable: false,
