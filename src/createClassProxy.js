@@ -36,6 +36,19 @@ function getDisplayName(Component) {
     'Unknown';
 }
 
+// This is a simple way to sanitize the component name.
+// It will prevent an exception if the component happens to use a name 
+// that is also not a valid identifier.
+const SIMPLE_IDENT_PATTERN = /^[$\w]+$/
+const SIMPLE_IDENT_FIX = /[^$\w]+/g
+
+function sanitizeFunctionName(fn) {
+  if (SIMPLE_IDENT_PATTERN.test(fn)) {
+	  return isNaN(parseInt(fn)) ? fn : '_' + fn;
+  }
+  return fn.replace(SIMPLE_IDENT_FIX, '_');
+}
+
 // This was originally a WeakMap but we had issues with React Native:
 // https://github.com/gaearon/react-proxy/issues/50#issuecomment-192928066
 let allProxies = [];
@@ -76,10 +89,11 @@ function proxyClass(InitialComponent) {
   }
 
   let displayName = getDisplayName(InitialComponent);
+  let componentName = sanitizeFunctionName(displayName);
   try {
     // Create a proxy constructor with matching name
     ProxyComponent = new Function('factory', 'instantiate',
-      `return function ${displayName}() {
+      `return function ${componentName}() {
          return instantiate(factory, this, arguments);
       }`
     )(() => CurrentComponent, instantiate);
