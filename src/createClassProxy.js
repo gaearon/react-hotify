@@ -76,19 +76,10 @@ function proxyClass(InitialComponent) {
   }
 
   let displayName = getDisplayName(InitialComponent);
-  try {
-    // Create a proxy constructor with a generic name
-    ProxyComponent = new Function('factory', 'instantiate',
-      `return function DynamicProxyComponent() {
-         return instantiate(factory, this, arguments);
-      }`
-    )(() => CurrentComponent, instantiate);
-  } catch (err) {
-    // Some environments may forbid dynamic evaluation
-    ProxyComponent = function () {
-      return instantiate(() => CurrentComponent, this, arguments);
-    };
-  }
+  ProxyComponent = function DynamicProxyComponent() {
+    return instantiate(() => CurrentComponent, this, arguments);
+  };
+  // Fix-up: the DynamicProxyComponent name should reflect the inner component
   try {
     Object.defineProperty(ProxyComponent, 'name', {
       value: displayName
