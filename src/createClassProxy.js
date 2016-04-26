@@ -77,9 +77,9 @@ function proxyClass(InitialComponent) {
 
   let displayName = getDisplayName(InitialComponent);
   try {
-    // Create a proxy constructor with matching name
+    // Create a proxy constructor with a generic name
     ProxyComponent = new Function('factory', 'instantiate',
-      `return function ${displayName}() {
+      `return function DynamicProxyComponent() {
          return instantiate(factory, this, arguments);
       }`
     )(() => CurrentComponent, instantiate);
