@@ -1,4 +1,5 @@
 import find from 'lodash/find';
+import ComponentMap from 'component-map'
 import createPrototypeProxy from './createPrototypeProxy';
 import bindAutoBindMethods from './bindAutoBindMethods';
 import deleteUnknownAutoBindMethods from './deleteUnknownAutoBindMethods';
@@ -36,21 +37,12 @@ function getDisplayName(Component) {
     'Unknown';
 }
 
-// This was originally a WeakMap but we had issues with React Native:
-// https://github.com/gaearon/react-proxy/issues/50#issuecomment-192928066
-let allProxies = [];
-function findProxy(Component) {
-  const pair = find(allProxies, ([key]) => key === Component);
-  return pair ? pair[1] : null;
-}
-function addProxy(Component, proxy) {
-  allProxies.push([Component, proxy]);
-}
+const allProxies = new ComponentMap({ WeakMap });
 
 function proxyClass(InitialComponent) {
   // Prevent double wrapping.
   // Given a proxy class, return the existing proxy managing it.
-  var existingProxy = findProxy(InitialComponent);
+  var existingProxy = allProxies.get(InitialComponent);
   if (existingProxy) {
     return existingProxy;
   }
@@ -116,7 +108,7 @@ function proxyClass(InitialComponent) {
     }
 
     // Prevent proxy cycles
-    var existingProxy = findProxy(NextComponent);
+    var existingProxy = allProxies.get(NextComponent);
     if (existingProxy) {
       return update(existingProxy.__getCurrent());
     }
@@ -232,7 +224,7 @@ function proxyClass(InitialComponent) {
   update(InitialComponent);
 
   const proxy = { get, update };
-  addProxy(ProxyComponent, proxy);
+  allProxies.set(ProxyComponent, proxy);
 
   Object.defineProperty(proxy, '__getCurrent', {
     configurable: false,

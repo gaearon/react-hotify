@@ -66,6 +66,7 @@
     "webpack": "1.4.8"
   },
   "dependencies": {
+    "component-map": "^1.0.2",
     "lodash": "^4.6.1"
   }
 }
