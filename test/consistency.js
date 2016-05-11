@@ -51,7 +51,13 @@ function createModernFixtures() {
   }
   delete Anon.name;
 
-  return { Bar, Baz, Foo, Anon };
+  class Broken extends React.Component {
+    render() {
+      throw new Error('mistakes were made');
+    }
+  }
+
+  return { Bar, Baz, Foo, Anon, Broken };
 }
 
 function createClassicFixtures() {
@@ -101,7 +107,13 @@ function createClassicFixtures() {
   });
   delete Anon.displayName;
 
-  return { Bar, Baz, Foo, Anon };
+  const Broken = React.createClass({
+    render() {
+      throw new Error('mistakes were made');
+    }
+  });
+
+  return { Bar, Baz, Foo, Anon, Broken };
 }
 
 describe('consistency', () => {
@@ -119,9 +131,9 @@ describe('consistency', () => {
   });
 
   function runCommonTests(createFixtures) {
-    let Bar, Baz, Foo, Anon;
+    let Bar, Baz, Foo, Anon, Broken;
     beforeEach(() => {
-      ({ Foo, Bar, Baz, Anon } = createFixtures());
+      ({ Foo, Bar, Baz, Anon, Broken } = createFixtures());
     });
 
     it('does not overwrite the original class', () => {
@@ -283,6 +295,44 @@ describe('consistency', () => {
       let proxy = createProxy(Anon);
       const Proxy = proxy.get();
       expect(() => renderer.render(<Proxy />)).toThrow('Oops');
+    });
+
+    it('can use error component for catching errors', () => {
+      function ErrorHandler({ error }) {
+        return <p>{error.message}</p>;
+      }
+      let proxy = createProxy(Broken, ErrorHandler);
+      const Proxy = proxy.get();
+      expect(() => renderer.render(<Proxy />)).toNotThrow();
+      const output = renderer.getRenderOutput()
+      expect(output.type).toEqual(ErrorHandler);
+      expect(output.props.error).toBeAn(Error);
+      expect(output.props.error.message).toEqual('mistakes were made');
+    });
+
+    it('still throws errors if no error component supplied', () => {
+      let proxy = createProxy(Broken);
+      const Proxy = proxy.get();
+      expect(() => renderer.render(<Proxy />)).toThrow();
+    });
+
+    it('can recover after handling an error', () => {
+      function ErrorHandler({ error }) {
+        return <p>{error.message}</p>;
+      }
+      let proxy = createProxy(Bar, ErrorHandler);
+      const Proxy = proxy.get();
+
+      expect(() => renderer.render(<Proxy />)).toNotThrow();
+      expect(renderer.getRenderOutput().props.children).toEqual('Bar');
+
+      proxy.update(Broken);
+      expect(() => renderer.render(<Proxy />)).toNotThrow();
+      expect(renderer.getRenderOutput().type).toEqual(ErrorHandler);
+
+      proxy.update(Baz);
+      expect(() => renderer.render(<Proxy />)).toNotThrow();
+      expect(renderer.getRenderOutput().props.children).toEqual('Baz');
     });
   }
 

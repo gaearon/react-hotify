@@ -1,7 +1,8 @@
+import React from "react";
 import assign from 'lodash/assign';
 import difference from 'lodash/difference';
 
-export default function createPrototypeProxy() {
+export default function createPrototypeProxy(ErrorComponent) {
   let proxy = {};
   let current = null;
   let mountedInstances = [];
@@ -42,6 +43,20 @@ export default function createPrototypeProxy() {
 
     return proxiedMethod;
   }
+
+  /**
+   * Augments the original render with exception handling & rendering.
+   */
+  function proxiedRender() {
+    if (typeof current.render === 'function') {
+      try {
+        return current.render.apply(this, arguments);
+      } catch (ex) {
+        return React.createElement(ErrorComponent, { error: ex });
+      }
+    }
+  }
+  proxiedRender.toString = proxyToString('render');
 
   /**
    * Augments the original componentDidMount with instance tracking.
@@ -157,6 +172,11 @@ export default function createPrototypeProxy() {
         defineProxyProperty(name, descriptor);
       }
     });
+
+    // Error catching for render
+    if (typeof ErrorComponent !== 'undefined') {
+      defineProxyPropertyWithValue('render', proxiedRender);
+    }
 
     // Track mounting and unmounting
     defineProxyPropertyWithValue('componentDidMount', proxiedComponentDidMount);

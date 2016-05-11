@@ -47,7 +47,7 @@ function addProxy(Component, proxy) {
   allProxies.push([Component, proxy]);
 }
 
-function proxyClass(InitialComponent) {
+function proxyClass(InitialComponent, ErrorComponent) {
   // Prevent double wrapping.
   // Given a proxy class, return the existing proxy managing it.
   var existingProxy = findProxy(InitialComponent);
@@ -103,7 +103,7 @@ function proxyClass(InitialComponent) {
   let prototypeProxy;
   if (InitialComponent.prototype && InitialComponent.prototype.isReactComponent) {
     // Point proxy constructor to the proxy prototype
-    prototypeProxy = createPrototypeProxy();
+    prototypeProxy = createPrototypeProxy(ErrorComponent);
     ProxyComponent.prototype = prototypeProxy.get();
   }
 
@@ -257,8 +257,8 @@ function createFallback(Component) {
   };
 }
 
-export default function createClassProxy(Component) {
+export default function createClassProxy(Component, ErrorComponent) {
   return Component.__proto__ && supportsProtoAssignment() ?
-    proxyClass(Component) :
+    proxyClass(Component, ErrorComponent) :
     createFallback(Component);
 }
