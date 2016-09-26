@@ -12,7 +12,7 @@ function createModernFixtures() {
       this.state = { counter: 0 };
     }
 
-    increment() {
+    increment(a) {
       this.setState({
         counter: this.state.counter + 1
       });
@@ -29,7 +29,7 @@ function createModernFixtures() {
       this.state = { counter: 0 };
     }
 
-    increment() {
+    increment(a, b) {
       this.setState({
         counter: this.state.counter + 10
       });
@@ -46,7 +46,7 @@ function createModernFixtures() {
       this.state = { counter: 0 };
     }
 
-    increment() {
+    increment(a, b, c) {
       this.setState({
         counter: this.state.counter + 100
       });
@@ -85,7 +85,7 @@ function createClassicFixtures() {
       return { counter: 0 };
     },
 
-    increment() {
+    increment(a) {
       this.setState({
         counter: this.state.counter + 1
       });
@@ -101,7 +101,7 @@ function createClassicFixtures() {
       return { counter: 0 };
     },
 
-    increment() {
+    increment(a, b) {
       this.setState({
         counter: this.state.counter + 10
       });
@@ -117,7 +117,7 @@ function createClassicFixtures() {
       return { counter: 0 };
     },
 
-    increment() {
+    increment(a, b, c) {
       this.setState({
         counter: this.state.counter + 100
       });
@@ -185,6 +185,7 @@ describe('instance method', () => {
       expect(renderer.getRenderOutput().props.children).toEqual(0);
 
       proxy.update(Counter1x);
+      expect(instance.increment.length).toEqual(1);
       instance.increment();
       expect(renderer.getRenderOutput().props.children).toEqual(1);
     });
@@ -195,15 +196,18 @@ describe('instance method', () => {
       const instance = renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(0);
       instance.increment();
+      expect(instance.increment.length).toEqual(1);
       expect(renderer.getRenderOutput().props.children).toEqual(1);
 
       proxy.update(Counter10x);
       instance.increment();
+      expect(instance.increment.length).toEqual(2);
       renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(11);
 
       proxy.update(Counter100x);
       instance.increment();
+      expect(instance.increment.length).toEqual(3);
       renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(111);
     });
@@ -216,7 +220,9 @@ describe('instance method', () => {
       warnSpy.destroy();
       const localWarnSpy = expect.spyOn(console, 'error');
 
+      expect(instance.increment.length).toEqual(1);
       instance.increment = instance.increment.bind(instance);
+      expect(instance.increment.length).toEqual(1);
 
       expect(localWarnSpy.calls.length).toBe(shouldWarnOnBind ? 1 : 0);
       localWarnSpy.destroy();
@@ -227,11 +233,13 @@ describe('instance method', () => {
 
       proxy.update(Counter10x);
       instance.increment();
+      expect(instance.increment.length).toEqual(2);
       renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(11);
 
       proxy.update(Counter100x);
       instance.increment();
+      expect(instance.increment.length).toEqual(3);
       renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(111);
     });
@@ -244,9 +252,11 @@ describe('instance method', () => {
       warnSpy.destroy();
       const localWarnSpy = expect.spyOn(console, 'error');
 
+      expect(instance.increment.length).toEqual(1);
       Object.defineProperty(instance, 'increment', {
         value: instance.increment.bind(instance)
       });
+      expect(instance.increment.length).toEqual(1);
 
       expect(localWarnSpy.calls.length).toBe(shouldWarnOnBind ? 1 : 0);
       localWarnSpy.destroy();
@@ -257,11 +267,13 @@ describe('instance method', () => {
 
       proxy.update(Counter10x);
       instance.increment();
+      expect(instance.increment.length).toEqual(2);
       renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(11);
 
       proxy.update(Counter100x);
       instance.increment();
+      expect(instance.increment.length).toEqual(3);
       renderer.render(<Proxy />);
       expect(renderer.getRenderOutput().props.children).toEqual(111);
     });
