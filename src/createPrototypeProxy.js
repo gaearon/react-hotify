@@ -7,6 +7,20 @@ export default function createPrototypeProxy() {
   let mountedInstances = [];
 
   /**
+   * Replaces length with getter pointing at the current version's length.
+   * Only works in browsers that support configurable function length.
+   */
+  function proxyLength(method, name) {
+    try {
+      Object.defineProperty(method, 'length', {
+        configurable: true,
+        enumerable: false,
+        get: function() { return current[name] && current[name].length },
+      })
+    } catch (err) { }
+  }
+
+  /**
    * Creates a proxied toString() method pointing to the current version's toString().
    */
   function proxyToString(name) {
@@ -18,6 +32,17 @@ export default function createPrototypeProxy() {
         return '<method was deleted>';
       }
     };
+  }
+
+  /**
+   * Creates a proxied bind() method that applies proxyLength to bound method.
+   */
+  function proxyBind(name) {
+    return function bind() {
+      var bound = Function.prototype.bind.apply(this, arguments)
+      proxyLength(bound, name)
+      return bound
+    }
   }
 
   /**
@@ -34,11 +59,14 @@ export default function createPrototypeProxy() {
     // Copy properties of the original function, if any
     assign(proxiedMethod, current[name]);
     proxiedMethod.toString = proxyToString(name);
+    proxiedMethod.bind = proxyBind(name);
     try {
       Object.defineProperty(proxiedMethod, 'name', {
         value: name
       });
     } catch (err) { }
+
+    proxyLength(proxiedMethod, name)
 
     return proxiedMethod;
   }
