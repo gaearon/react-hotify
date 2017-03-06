@@ -66,6 +66,7 @@
     "webpack": "1.4.8"
   },
   "dependencies": {
-    "lodash": "^4.6.1"
+    "lodash": "^4.6.1",
+    "shallowequal": "^0.2.2"
   }
 }
