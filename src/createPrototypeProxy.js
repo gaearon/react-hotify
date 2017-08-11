@@ -129,10 +129,21 @@ export default function createPrototypeProxy() {
     current = next;
 
     // Find changed property names
-    const currentNames = new Set(Object.getOwnPropertyNames(current));
+    const currentNames = Object.getOwnPropertyNames(current);
     const previousName = Object.getOwnPropertyNames(proxy);
+
+    // Map the property names as keys in an object to get constant time access
+    // when calculating the removed properties.
+    const currentNamesObject = currentNames.reduce(
+      (acc, property) => {
+        acc[property] = true;
+        return acc;
+      },
+      Object.create(null),
+    );
+
     const removedNames = previousName.filter(
-      property => !currentNames.has(property),
+      property => !currentNames[property],
     );
 
     // Remove properties and methods that are no longer there
