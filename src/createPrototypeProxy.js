@@ -1,6 +1,3 @@
-import assign from 'lodash/assign';
-import difference from 'lodash/difference';
-
 export default function createPrototypeProxy() {
   let proxy = {};
   let current = null;
@@ -32,7 +29,7 @@ export default function createPrototypeProxy() {
     };
 
     // Copy properties of the original function, if any
-    assign(proxiedMethod, current[name]);
+    Object.assign(proxiedMethod, current[name]);
     proxiedMethod.toString = proxyToString(name);
 
     return proxiedMethod;
@@ -132,9 +129,11 @@ export default function createPrototypeProxy() {
     current = next;
 
     // Find changed property names
-    const currentNames = Object.getOwnPropertyNames(current);
+    const currentNames = new Set(Object.getOwnPropertyNames(current));
     const previousName = Object.getOwnPropertyNames(proxy);
-    const removedNames = difference(previousName, currentNames);
+    const removedNames = previousName.filter(
+      property => !currentNames.has(property),
+    );
 
     // Remove properties and methods that are no longer there
     removedNames.forEach(name => {
