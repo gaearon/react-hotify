@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import createPrototypeProxy from './createPrototypeProxy';
 import bindAutoBindMethods from './bindAutoBindMethods';
 import deleteUnknownAutoBindMethods from './deleteUnknownAutoBindMethods';
@@ -32,14 +31,14 @@ function isEqualDescriptor(a, b) {
 // https://github.com/gaearon/react-proxy/issues/50#issuecomment-192928066
 let allProxies = [];
 function findProxy(Component) {
-  const pair = find(allProxies, ([key]) => key === Component);
+  const pair = allProxies.find(([key]) => key === Component);
   return pair ? pair[1] : null;
 }
 function addProxy(Component, proxy) {
   allProxies.push([Component, proxy]);
 }
 
-export default function proxyClass(InitialComponent) {
+export function proxyClass(InitialComponent) {
   // Prevent double wrapping.
   // Given a proxy class, return the existing proxy managing it.
   var existingProxy = findProxy(InitialComponent);

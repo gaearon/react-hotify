@@ -67,7 +67,6 @@
     "webpack": "1.4.8"
   },
   "dependencies": {
-    "lodash": "^4.6.1",
     "react-deep-force-update": "^1.0.0"
   }
 }
