@@ -28,7 +28,7 @@ function shouldDeleteModernInstanceMethod(component, name) {
     return false;
   }
 
-  if (prototypeDescriptor.get().length !== component[name].length) {
+  if (prototypeDescriptor.get.length !== component[name].length) {
     // The length doesn't match, bail out
     return false;
   }
